@@ -56,8 +56,8 @@ class StockPortfolio:
                 print(f"  Total Value: ${total_value:.2f}")
                 print(f"  Profit/Loss: ${profit_loss:.2f}")
 
-# Example Usage
-api_key = "YOUR_ALPHA_VANTAGE_API_KEY"  # Replace with your Alpha Vantage API key
+
+api_key = "YOUR_ALPHA_VANTAGE_API_KEY" 
 portfolio = StockPortfolio(api_key)
 portfolio.add_stock('AAPL', 10, 150)
 portfolio.add_stock('MSFT', 5, 250)
