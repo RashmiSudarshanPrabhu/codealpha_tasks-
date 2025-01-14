@@ -3,7 +3,7 @@ from nltk.chat.util import Chat, reflections
 
 nltk.download('punkt')
 
-# Define pairs of patterns and responses
+
 pairs = [
     (r"hi|hello|hey", ["Hello!", "Hi there!", "Hey!"]),
     (r"how are you(.*)?", ["I'm just a bot, but I'm doing fine! How about you?"]),
@@ -14,10 +14,10 @@ pairs = [
     (r"(.*)", ["I'm not sure I understand. Can you rephrase?"]),
 ]
 
-# Create the chatbot
+
 chatbot = Chat(pairs, reflections)
 
-# Run the chatbot
+
 print("ChatBot: Hi! I'm a basic chatbot. Type 'bye' to exit.\n")
 
 while True:
