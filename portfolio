@@ -1,0 +1,66 @@
+import requests
+
+class StockPortfolio:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.portfolio = {}
+
+    def add_stock(self, ticker, qty, purchase_price):
+        if ticker in self.portfolio:
+            print(f"{ticker} is already in your portfolio. Use 'update_stock' to modify.")
+            return
+        self.portfolio[ticker] = {
+            'quantity': qty,
+            'purchase_price': purchase_price
+        }
+        print(f"Added {qty} shares of {ticker} at ${purchase_price} each.")
+
+    def remove_stock(self, ticker):
+        if ticker in self.portfolio:
+            del self.portfolio[ticker]
+            print(f"Removed {ticker} from your portfolio.")
+        else:
+            print(f"{ticker} not found in your portfolio.")
+
+    def get_stock_price(self, ticker):
+        url = f"https://www.alphavantage.co/query"
+        params = {
+            "function": "GLOBAL_QUOTE",
+            "symbol": ticker,
+            "apikey": self.api_key
+        }
+        response = requests.get(url, params=params)
+        data = response.json()
+        try:
+            price = float(data["Global Quote"]["05. price"])
+            return price
+        except KeyError:
+            print(f"Error fetching data for {ticker}.")
+            return None
+
+    def display_portfolio(self):
+        if not self.portfolio:
+            print("Your portfolio is empty.")
+            return
+
+        print("Your Portfolio:")
+        for ticker, details in self.portfolio.items():
+            current_price = self.get_stock_price(ticker)
+            if current_price is not None:
+                total_value = current_price * details['quantity']
+                profit_loss = (current_price - details['purchase_price']) * details['quantity']
+                print(f"\nTicker: {ticker}")
+                print(f"  Quantity: {details['quantity']}")
+                print(f"  Purchase Price: ${details['purchase_price']:.2f}")
+                print(f"  Current Price: ${current_price:.2f}")
+                print(f"  Total Value: ${total_value:.2f}")
+                print(f"  Profit/Loss: ${profit_loss:.2f}")
+
+# Example Usage
+api_key = "YOUR_ALPHA_VANTAGE_API_KEY"  # Replace with your Alpha Vantage API key
+portfolio = StockPortfolio(api_key)
+portfolio.add_stock('AAPL', 10, 150)
+portfolio.add_stock('MSFT', 5, 250)
+portfolio.display_portfolio()
+portfolio.remove_stock('AAPL')
+portfolio.display_portfolio()
